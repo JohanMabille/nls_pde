@@ -18,7 +18,7 @@ namespace dauphine
             Payoff(const Payoff&&) = delete;
             Payoff& operator=(Payoff&) = delete;
             virtual matrix get_payoff(matrix space_grid) const;
-
+            
 
         protected:
             matrix m_end_values;
@@ -26,7 +26,7 @@ namespace dauphine
             const double& m_S0;
             Payoff(const double& K, const double& S0);
 
-
+            
         };
 
         class Call : public Payoff

@@ -18,6 +18,8 @@ namespace dauphine
             Payoff* payoff, double upper_bound, double lower_bound,
         std::unordered_map< std::string, double > boundary_conditions = {} , double theta = 0.5);
 
+        ~PDE_solver();
+
         double compute_bottom_alpha() const;
         double compute_bottom_beta() const;
         double compute_bottom_gamma() const;

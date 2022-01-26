@@ -81,7 +81,10 @@ namespace dauphine
 
     }
 
-
+    PDE_solver::~PDE_solver()
+    {
+        delete m_payoffPtr;
+    }
 
     double PDE_solver::compute_bottom_alpha() const
     {

@@ -30,6 +30,7 @@ namespace dauphine
         double compute_top_beta() const;
         double compute_top_gamma() const;
 
+        // Why compute_bis and not simply compute or solve?
         TridiagExtended compute_A_bis(double alpha, double beta, double gamma) const;
         TridiagExtended compute_B_bis(const TridiagExtended& A) const;
         std::vector<double> compute_D_bis(double alpha, double gamma) const;
@@ -38,6 +39,14 @@ namespace dauphine
         double get_value(double S_l) const;
 
     protected:
+        // You could go further and use matrices of coefficients (as
+        // suggested in the report).
+        // This would require to compute the tridiag system at each
+        // iteration (with some performance trick, such as reusing
+        // one of the tridiag matrix in the next iteration).
+        // There are some techniques that allow you to code containers
+        // that take advantage of constant coefficients by not duplicating
+        // them while still providing a matrix API.
         double m_a;
         double m_b;
         double m_c;
@@ -51,6 +60,9 @@ namespace dauphine
         double m_upper_bound;
         double m_lower_bound;
         double m_dx;
+        // Actually you don't need to store the whole matrix of solutions
+        // You need only two vectors, one for the solution at T[n], and one
+        // for the solution at T[n-1]
         matrix m_values;
         matrix m_space_grid;
         bool m_grid_computed;
@@ -60,6 +72,8 @@ namespace dauphine
         int m_LD2_nset;
         int m_UD1_nset;
         int m_UD2_nset;
+        // a hash_map is a bit of overkill given the number of elements
+        // you have to store. std::map would be enough.
         std::unordered_map< std::string,  double> m_boundary_conditions;
         Payoff* m_payoffPtr;
 

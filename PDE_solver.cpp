@@ -40,6 +40,10 @@ namespace dauphine
         m_end_values = m_payoffPtr->get_payoff(m_space_grid);
         m_values.fill(0, m_N-1, round(m_T / m_dt), round(m_T / m_dt), m_end_values);
 
+        // This succession of "if" is a good indicator that boundary conditions
+        // ocul dbe abstracted in a hierarchy of classes. The way to apply boundary
+        // conditions would be to pass the tridiag system to a virtual method that
+        // would fill the first and last rows accoriding to the type of BC.
         if (m_boundary_conditions.find("lowerValue") != m_boundary_conditions.end())
         {
             double LV = m_boundary_conditions["lowerValue"];
@@ -83,6 +87,10 @@ namespace dauphine
 
     PDE_solver::~PDE_solver()
     {
+        // So you can see two PDe_solver objects try to delete the
+        // same pointer
+        std::cout << "PDE_solver destructor - ";
+        std::cout << "m_payoffPtr = " << m_payoffPtr << std::endl;
         delete m_payoffPtr;
     }
 
@@ -271,6 +279,24 @@ namespace dauphine
             upper_index = m_N - 1;
         }
 
+        // X and F could be defined and resized out of the loop to avoid memory allocations and
+        // deallocations in the loop. Further optimization consist in using only two vectors
+        // instead of two vectors and a matrix to store the values. Then you use two pointers
+        // on the vectors and swap them at each iteration to avoid copying the solution of T[n]
+        // into the RHS vector of T[n-1]
+        // std::vector<double> a(size);
+        // std::vector<double> b(size);
+        // std::vector<double>* v_n = &a;
+        // std::vector<double>* v_nm1 = &b;
+        //
+        // for (...)
+        // {
+        //     *v_nm = B.prod_with_vector(v_nm1)
+        //     ...
+        //     *v_nm1 = A.solve(*v_nm);
+        //     std::swap(v_nm1, v_nm);
+        // }
+        //
         for (std::size_t i = round(m_T / m_dt) - 1; i < round(m_T / m_dt); i--)
         {
             std::vector <double> F = B.prod_withVector(m_values(lower_index, upper_index, i + 1));

@@ -4,6 +4,8 @@
 #include "cmath"
 #include<math.h>
 
+#include "closed_form.hpp"
+
 int main(int argc, char* argv[])
 {
 
@@ -13,10 +15,12 @@ int main(int argc, char* argv[])
     size_t n= 10000;
     double K = 48;
     double vol = 0.16;
-    double r = 0.001;
+    //double r = 0.001;
+    double r = 0.04;
     double S0 = 50;
     double dt = 1.0 / 365;
-    double T = 30.0 / 365;
+    //double T = 30.0 / 365;
+    double T = 1.;
     //double lw_bound = (log(S0) - 5 *vol * pow( T, 0.5));
     //double up_bound = (log(S0) + 5 * vol *pow( T, 0.5));
 
@@ -49,6 +53,10 @@ int main(int argc, char* argv[])
     //std::cout <<"\n "<< std::endl;
 
     // --- Solver BS
+
+    // You solver gives the correct price, you should definitely show it ;)
+    double bs_price = dauphine::bs_price(S0*std::exp(r*T), K, vol, T, true) * std::exp(-r*T);
+    std::cout << "closed formula: " << bs_price << std::endl;
 
     std::cout <<" ----------------- SOLVER BLACK-SCHOLES SIMPLE ----------------- \n " << std::endl;
 

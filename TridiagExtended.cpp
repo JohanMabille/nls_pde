@@ -4,6 +4,8 @@
 
 namespace dauphine
 {
+    // Either pass the vector by constant references and copy them in the class data members,
+    // or pass them by values and move them into the class data members
 	TridiagExtended::TridiagExtended(std::vector<double> d, std::vector<double> l, std::vector<double> u, double e, double f)
 		: m_d(d), m_l(l), m_u(u), m_e(e), m_f(f), m_size(d.size())
 	{

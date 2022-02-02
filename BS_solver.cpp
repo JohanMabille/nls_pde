@@ -124,6 +124,12 @@ namespace dauphine
 		throw std::logic_error("S out of range - please renter an S within grid bound");
 		}
 		double price = get_price(S);
+                // Here you pass m_payoffPtr to ta new BS_solver object. YOu copy the pointer, not the pointer object.
+                // Since PDE_Solver, the mother class of BS_solver, is reponsible for the deletion of this pointer
+                // you will have a double deletion (one from BSsolverBumped, and one form this).
+                // A better solution would be to allocate the payoff on the stack in the main function, pass it
+                // by pointer (it's fine), but not delete it in the solver. When exiting the main function, the payoff
+                // will be automagically deleted.
 		BS_solver BSsolverBumped(m_vol + vol_bump, m_r, m_dt, m_T, m_payoffPtr, m_S0, m_N, m_upper_bound, m_lower_bound, m_boundary_conditions);
 		BSsolverBumped.compute_bis();
 		double price_bumped = BSsolverBumped.get_price(S);

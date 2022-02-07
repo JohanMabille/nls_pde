@@ -6,6 +6,8 @@
 
 namespace dauphine
 {
+    // Why inheriting from PDE_solver? BS_solver should encapsulate PDE_solver and provide
+    // an API that forward to that of PDE_solver (compute_bis for instance)
 	class BS_solver : public PDE_solver
 	{
 	public:

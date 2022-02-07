@@ -23,6 +23,7 @@ endif()
 set(TYPES_SRCS
     main.cpp
     matrix.cpp
+    closed_form.cpp
     PDE_solver.cpp
     BS_solver.cpp
     TridiagExtended.cpp
